@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe Home</title>
+</head>
+<body>
+    <h1>My recipes!</h1>
+<table>
+    <tr>
+        <th>Difficulty</th>
+        <th>Description</th>
+        <th>Prep time</th>
+        <th>Cook time</th>
+        <th>Servings</th>
+    </tr>
+    <!--/*@thymesVar id="recipe" type="com.example.sfgtrainingrecipe.domain.Recipe"*/-->
+    <tr th:each="recipe : ${recipes}">
+            <td th:text="${recipe.difficulty}"></td>
+            <td th:text="${recipe.description}"></td>
+            <td th:text="${recipe.prepTime}"></td>
+            <td th:text="${recipe.cookTime}"></td>
+            <td th:text="${recipe.servings}"></td>
+    </tr>
+</table>
+</body>
+</html>
