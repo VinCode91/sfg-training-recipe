@@ -54,8 +54,8 @@ public class DataLoader implements CommandLineRunner {
                 "If no gloves are available, wash your hands thoroughly after handling, and do not touch your " +
                 "eyes or the area near your eyes for several hours afterwards.\n" +
                 "2. Chilling tomatoes hurts their flavor. So, if you want to add chopped tomato to your guacamole, add it just before serving.");
-        note1.setRecipe(recipe1);
-        recipe1.setNotes(note1);
+        note1.setRecipe(recipe1); // Necessary for bidirectional relation
+        recipe1.setNotes(note1); // can refactor this setter to update recipe for Notes param, then remove previous line (better code)
 
         recipe1.getIngredients().addAll(Arrays.asList(new Ingredient("ripe avocados", 2, piece, recipe1),
                 new Ingredient("kosher salt", 0.25, teaspoon, recipe1),
