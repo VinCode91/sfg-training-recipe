@@ -4,11 +4,14 @@ import com.example.sfgtrainingrecipe.domain.*;
 import com.example.sfgtrainingrecipe.repositories.CategoryRepository;
 import com.example.sfgtrainingrecipe.repositories.RecipeRepository;
 import com.example.sfgtrainingrecipe.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
+@Slf4j
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -23,12 +26,14 @@ public class DataLoader implements CommandLineRunner {
     }
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
         if (recipeRepository.count() == 0)
             loadData();
     }
 
     private void loadData() {
+        log.debug("Adding new units of measure");
         UnitOfMeasure teaspoon = unitOfMeasureRepository.findByDescription("Teaspoon").get();
         UnitOfMeasure tablespoon = unitOfMeasureRepository.findByDescription("Tablespoon").get();
         UnitOfMeasure piece = unitOfMeasureRepository.findByDescription("Piece").get();
@@ -47,6 +52,7 @@ public class DataLoader implements CommandLineRunner {
         recipe1.setDifficulty(Difficulty.EASY);
 
         recipe1.getCategories().add(categoryRepository.findByDescription("Mexican").get());
+        log.debug("Create new recipe");
 
 
         Notes note1 = new Notes();
@@ -56,6 +62,7 @@ public class DataLoader implements CommandLineRunner {
                 "2. Chilling tomatoes hurts their flavor. So, if you want to add chopped tomato to your guacamole, add it just before serving.");
         note1.setRecipe(recipe1); // Necessary for bidirectional relation
         recipe1.setNotes(note1); // can refactor this setter to update recipe for Notes param, then remove previous line (better code)
+        log.debug("load recipe notes");
 
         recipe1.getIngredients().addAll(Arrays.asList(new Ingredient("ripe avocados", 2, piece, recipe1),
                 new Ingredient("kosher salt", 0.25, teaspoon, recipe1),
@@ -68,5 +75,6 @@ public class DataLoader implements CommandLineRunner {
                 new Ingredient("Red radish or jicama", 12, slice, recipe1)
         ));
         recipeRepository.save(recipe1);
+        log.debug("Save recipe with ingredients");
     }
 }

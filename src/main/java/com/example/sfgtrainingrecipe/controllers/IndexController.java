@@ -3,11 +3,13 @@ package com.example.sfgtrainingrecipe.controllers;
 import com.example.sfgtrainingrecipe.repositories.CategoryRepository;
 import com.example.sfgtrainingrecipe.repositories.UnitOfMeasureRepository;
 import com.example.sfgtrainingrecipe.services.RecipeServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@Slf4j
 public class IndexController {
 
     private final CategoryRepository categoryRepository;
@@ -22,6 +24,7 @@ public class IndexController {
 
     @RequestMapping({"", "/index"})
     public String getIndexPage(Model model){
+        log.debug("displaying recipes");
         model.addAttribute("recipes", recipeService.getRecipes());
         return "index";
     }
