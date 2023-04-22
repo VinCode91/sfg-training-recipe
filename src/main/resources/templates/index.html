@@ -3,25 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>Recipe Home</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/5.2.3/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified Javascript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"
+            th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.min.js}"></script>
 </head>
 <body>
-    <h1>My recipes!</h1>
-<table>
-    <tr>
-        <th>Difficulty</th>
-        <th>Description</th>
-        <th>Prep time</th>
-        <th>Cook time</th>
-        <th>Servings</th>
-    </tr>
-    <!--/*@thymesVar id="recipe" type="com.example.sfgtrainingrecipe.domain.Recipe"*/-->
-    <tr th:each="recipe : ${recipes}">
-            <td th:text="${recipe.difficulty}"></td>
-            <td th:text="${recipe.description}"></td>
-            <td th:text="${recipe.prepTime}"></td>
-            <td th:text="${recipe.cookTime}"></td>
-            <td th:text="${recipe.servings}"></td>
-    </tr>
-</table>
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+                    <h1 class="panel-title">My Recipes!</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
+                        <table class="table table-hover ">
+                            <thead class="thead-inverse">
+                            <tr>
+                                <th>ID</th>
+                                <th>Description</th>
+                                <th>View</th>
+                            </tr>
+                            </thead>
+                            <tr th:remove="all">
+                                <td>123</td>
+                                <td>Tasty Goodnees 1</td>
+                                <td><a href="#">View</a></td>
+                            </tr>
+                            <tr th:remove="all">
+                                <td>12333</td>
+                                <td>Tasty Goodnees 2</td>
+                                <td><a href="#">View</a></td>
+                            </tr>
+                            <tr th:each="recipe : ${recipes}">
+                                <td th:text="${recipe.id}">334</td>
+                                <td th:text="${recipe.description}">Tasty Goodnees 3</td>
+                                <td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}">View</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
