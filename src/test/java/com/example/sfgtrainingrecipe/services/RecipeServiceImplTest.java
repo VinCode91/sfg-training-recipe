@@ -64,6 +64,5 @@ class RecipeServiceImplTest {
     @AfterEach
     void tearDown() {
         reset(recipeRepository);
-
     }
 }

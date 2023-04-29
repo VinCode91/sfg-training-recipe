@@ -14,6 +14,7 @@ import java.util.Set;
 
 @Slf4j
 @Service
+@Transactional
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
@@ -39,7 +40,11 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeRepository.findById(id).orElseThrow(() -> new RuntimeException("Recipe not found!"));
     }
     @Override
-    @Transactional
+    public RecipeCommand findCommandById(Long l) {
+        return recipeToRecipeCommand.convert(findById(l));
+    }
+
+    @Override
     public RecipeCommand saveRecipeCommand(RecipeCommand command) {
         Recipe detachedRecipe = recipeCommandToRecipe.convert(command);
 
