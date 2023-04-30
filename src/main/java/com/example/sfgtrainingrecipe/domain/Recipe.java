@@ -1,7 +1,5 @@
 package com.example.sfgtrainingrecipe.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +9,6 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = {"ingredients", "notes", "categories"})
 @Entity
 public class Recipe {
 
@@ -29,15 +26,19 @@ public class Recipe {
     // Recipe owns ingredients
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients = new HashSet<>();
-    @Enumerated(EnumType.STRING)
-    private Difficulty difficulty;
+
     @Lob
     private Byte[] image;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
+
     @ManyToMany
     @JoinTable(name = "recipe_category",
-            joinColumns = @JoinColumn(name = "recipe_id"),
+        joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
@@ -53,5 +54,4 @@ public class Recipe {
         this.ingredients.add(ingredient);
         return this;
     }
-
 }
