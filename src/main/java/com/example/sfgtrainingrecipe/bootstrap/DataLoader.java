@@ -154,6 +154,6 @@ public class DataLoader implements CommandLineRunner {
 
         recipeRepository.save(tacosRecipe);
         
-        log.debug("Save recipe with ingredients");
+        log.debug("Save recipes with their ingredients");
     }
 }
