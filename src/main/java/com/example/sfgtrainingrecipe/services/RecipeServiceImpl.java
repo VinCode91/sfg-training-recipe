@@ -4,6 +4,7 @@ import com.example.sfgtrainingrecipe.commands.RecipeCommand;
 import com.example.sfgtrainingrecipe.converters.RecipeCommandToRecipe;
 import com.example.sfgtrainingrecipe.converters.RecipeToRecipeCommand;
 import com.example.sfgtrainingrecipe.domain.Recipe;
+import com.example.sfgtrainingrecipe.exceptions.NotFoundException;
 import com.example.sfgtrainingrecipe.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe findById(Long id) {
-        return recipeRepository.findById(id).orElseThrow(() -> new RuntimeException("Recipe not found!"));
+        return recipeRepository.findById(id).orElseThrow(() -> new NotFoundException("Recipe not found!"));
     }
     @Override
     public RecipeCommand findCommandById(Long l) {

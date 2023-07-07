@@ -1,6 +1,7 @@
 package com.example.sfgtrainingrecipe.services;
 
 import com.example.sfgtrainingrecipe.domain.Recipe;
+import com.example.sfgtrainingrecipe.exceptions.NotFoundException;
 import com.example.sfgtrainingrecipe.repositories.RecipeRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +44,15 @@ class RecipeServiceImplTest {
         assertNotNull(recipeReturned, "Null recipe returned");
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();
+    }
+
+    @Test
+    void testRecipeNotFound() {
+        Optional<Recipe> recipe = Optional.empty();
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipe);
+
+        assertThrows(NotFoundException.class, () -> recipeService.findById(1L));
     }
 
     @Test

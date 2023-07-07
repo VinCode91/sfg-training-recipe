@@ -2,6 +2,7 @@ package com.example.sfgtrainingrecipe.controllers;
 
 import com.example.sfgtrainingrecipe.commands.RecipeCommand;
 import com.example.sfgtrainingrecipe.domain.Recipe;
+import com.example.sfgtrainingrecipe.exceptions.NotFoundException;
 import com.example.sfgtrainingrecipe.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -46,6 +48,15 @@ class RecipeControllerTest {
         mockMvc.perform(get("/recipe/2/show/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/show"));
+    }
+
+    @Test
+    void testRecipeNotFound() throws Exception{
+        given(recipeService.findById(anyLong())).willThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
     }
 
     @Test

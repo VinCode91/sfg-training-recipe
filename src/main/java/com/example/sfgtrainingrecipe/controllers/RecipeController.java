@@ -2,11 +2,14 @@ package com.example.sfgtrainingrecipe.controllers;
 
 import com.example.sfgtrainingrecipe.commands.RecipeCommand;
 import com.example.sfgtrainingrecipe.domain.Recipe;
+import com.example.sfgtrainingrecipe.exceptions.NotFoundException;
 import com.example.sfgtrainingrecipe.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by jt on 6/19/17.
@@ -24,12 +27,8 @@ public class RecipeController {
 
     @GetMapping("/{id}/show")
     public String getRecipe(@PathVariable Long id, Model model) {
-        try {
-            model.addAttribute("recipe", recipeService.findById(id));
-            return "recipe/show";
-        } catch (RuntimeException e) {
-            return "redirect:/";
-        }
+        model.addAttribute("recipe", recipeService.findById(id));
+        return "recipe/show";
     }
 
     @GetMapping("/new")
@@ -67,5 +66,14 @@ public class RecipeController {
         log.debug("Deleting recipe id: " + id);
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView handleNotFound() {
+        log.error("Handling not found exception");
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("404error");
+        return modelAndView;
     }
 }
