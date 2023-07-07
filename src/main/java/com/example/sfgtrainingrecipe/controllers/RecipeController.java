@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import static com.example.sfgtrainingrecipe.controllers.ControllerExceptionHandler.handleException;
+
 /**
  * Created by jt on 6/19/17.
  */
@@ -75,18 +77,5 @@ public class RecipeController {
         return handleException(exception, "404error");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NumberFormatException.class)
-    public ModelAndView handleNotFound(NumberFormatException exception) {
-        log.error("Handling noumber format exception");
-        return handleException(exception, "400error");
-    }
 
-    public ModelAndView handleException(Exception exception, String view) {
-        log.error(exception.getMessage());
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(view);
-        modelAndView.addObject("exception", exception);
-        return modelAndView;
-    }
 }
