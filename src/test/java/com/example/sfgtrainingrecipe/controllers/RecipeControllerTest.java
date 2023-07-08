@@ -35,7 +35,7 @@ class RecipeControllerTest {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                //.setControllerAdvice(new ControllerExceptionHandler())
+                .setControllerAdvice(new ControllerExceptionHandler())
                 .build();
     }
 
@@ -89,9 +89,22 @@ class RecipeControllerTest {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("id", "")
                         .param("description", "some string")
+                        .param("directions", "some string")
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/2/show"));
+    }
+
+    @Test
+    void testPostNewRecipeFormValidationFail() throws Exception{
+        mockMvc.perform(post("/recipe")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", "")
+                        .param("description", "some string")
+                )
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("recipe"))
+                .andExpect(view().name("recipe/recipeform"));
     }
 
     @Test
@@ -106,21 +119,34 @@ class RecipeControllerTest {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("id", "")
                         .param("description", "some string")
+                        .param("directions", "some string")
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/2/show"));
     }
 
     @Test
-    void testUpdateUnknowRecipe() throws Exception {
+    void testUpdateUnknownRecipe() throws Exception {
         when(recipeService.findById(anyLong())).thenReturn(null);
 
         mockMvc.perform(put("/recipe/2")
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .param("id", "")
                     .param("description", "some string")
+                    .param("directions", "some string")
                 ).andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/new"));
+    }
+
+    @Test
+    void testUpdateRecipeFormValidationFail() throws Exception {
+        mockMvc.perform(put("/recipe/2")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", "")
+                )
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("recipe"))
+                .andExpect(view().name("recipe/recipeform"));
     }
 
     @Test

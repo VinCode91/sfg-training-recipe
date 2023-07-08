@@ -8,8 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 import static com.example.sfgtrainingrecipe.controllers.ControllerExceptionHandler.handleException;
 
@@ -21,6 +24,7 @@ import static com.example.sfgtrainingrecipe.controllers.ControllerExceptionHandl
 @RequestMapping("/recipe")
 public class RecipeController {
 
+    public static final String RECIPE_RECIPEFORM_URL = "recipe/recipeform";
     private final RecipeService recipeService;
 
     public RecipeController(RecipeService recipeService) {
@@ -37,24 +41,29 @@ public class RecipeController {
     public String newRecipe(Model model){
         model.addAttribute("recipe", new RecipeCommand());
 
-        return "recipe/recipeform";
+        return RECIPE_RECIPEFORM_URL;
     }
 
     @GetMapping("/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model){
         model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
-        return  "recipe/recipeform";
+        return RECIPE_RECIPEFORM_URL;
     }
 
     @PostMapping
-    public String create(@ModelAttribute RecipeCommand command){
+    public String create(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return handleFormErrors(bindingResult);
+        }
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
-
         return "redirect:/recipe/" + savedCommand.getId() + "/show";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable String id, @ModelAttribute RecipeCommand updatedCommand) {
+    public String update(@PathVariable String id, @Valid @ModelAttribute("recipe") RecipeCommand updatedCommand, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return handleFormErrors(bindingResult);
+        }
         if(recipeService.findById(Long.valueOf(id)) != null) {
             RecipeCommand saved = recipeService.saveRecipeCommand(updatedCommand);
             return "redirect:/recipe/" + saved.getId() + "/show";
@@ -77,5 +86,8 @@ public class RecipeController {
         return handleException(exception, "404error");
     }
 
-
+    private String handleFormErrors(BindingResult bindingResult) {
+        bindingResult.getAllErrors().forEach(objectError -> log.debug("Validations constraints error: " + objectError.toString()));
+        return RECIPE_RECIPEFORM_URL;
+    }
 }
