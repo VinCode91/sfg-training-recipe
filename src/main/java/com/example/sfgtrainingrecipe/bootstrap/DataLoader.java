@@ -6,6 +6,7 @@ import com.example.sfgtrainingrecipe.repositories.RecipeRepository;
 import com.example.sfgtrainingrecipe.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import java.util.Arrays;
 
 @Slf4j
 @Component
+@Profile("default")
 public class DataLoader implements CommandLineRunner {
 
     private final RecipeRepository recipeRepository;
